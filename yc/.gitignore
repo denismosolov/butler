@@ -1,0 +1,5 @@
+# Директория для установки yc https://cloud.yandex.ru/docs/cli/operations/install-cli
+# Игнирируй все файлы в этой директории
+*
+# Кроме файла .gitignore
+!.gitignore

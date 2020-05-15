@@ -1,0 +1,8 @@
+composer.phar
+composer-setup.php
+vendor/
+
+butler.zip
+
+.vscode
+.php_cs.cache
