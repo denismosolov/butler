@@ -82,22 +82,18 @@ class Application
                 'end_session' => true,
             ];
         } elseif (
-            ! isset($this->event['state']['user']['job_index']) &&
+            ! isset($this->event['state']['user']['job_index']) ||
                    ! isset($this->event['state']['user']['job_state'])
         ) {
-            if ($this->event['session']['new']) {
-                // UC-1
-                $response['response'] = [
-                    'text' => $this->jobs[0]['brief'] . ' ' . self::HINT_AGREE_NEXT,
-                    'end_session' => false,
-                ];
-                $response['user_state_update'] = [
-                    'job_index' => 0,
-                    'job_state' => self::UC2,
-                ];
-            } else {
-                // @todo: uknown error
-            }
+            // UC-1
+            $response['response'] = [
+                'text' => $this->jobs[0]['brief'] . ' ' . self::HINT_AGREE_NEXT,
+                'end_session' => false,
+            ];
+            $response['user_state_update'] = [
+                'job_index' => 0,
+                'job_state' => self::UC2,
+            ];
         } elseif ($this->event['state']['user']['job_state'] === self::UC2) {
             if ($this->event['request']['command'] === self::COMMAND_ACCEPT) {
                 // accept

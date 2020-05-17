@@ -111,6 +111,49 @@ final class ApplicationTest extends TestCase
         $this->assertTrue($response['end_session']);
     }
 
+    public function testLegacyDataFormat(): void
+    {
+        $event = $this->getEvent([
+            'request' => [
+                'command' => '',
+                'original_utterance' => '',
+            ],
+            'state' => [
+                'session' => [],
+                'user' => [
+                    'job_index' => 3,
+                    'daily_job' => [
+                        'date' => '2020-05-17',
+                        'index' => 2,
+                    ],
+                    'weekly_job' => [
+                        'index' => 15,
+                    ],
+                ],
+            ],
+        ]);
+     
+        $app = new Application();
+        $app->setJobs($this->jobs);
+        $app->setEvent($event);
+        $result = $app->run();
+
+        $this->assertArrayHasKey('response', $result);
+        $response = $result['response'];
+        $this->assertArrayHasKey('text', $response);
+        $this->assertNotEmpty($response['text']);
+        $this->assertEquals($this->jobs[0]['brief'] . ' ' . Application::HINT_AGREE_NEXT, $response['text']);
+        $this->assertArrayHasKey('end_session', $response);
+        $this->assertFalse($response['end_session']);
+
+        $this->assertArrayHasKey('user_state_update', $result);
+        $user_state_update = $result['user_state_update'];
+        $this->assertArrayHasKey('job_index', $user_state_update);
+        $this->assertEquals(0, $user_state_update['job_index']);
+        $this->assertArrayHasKey('job_state', $user_state_update);
+        $this->assertEquals(Application::UC2, $user_state_update['job_state']);
+    }
+
     // UC-1
     public function testFirstCall(): void
     {
