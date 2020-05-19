@@ -147,7 +147,10 @@ class Application
                 'job_state' => self::UC4,
             ];
         } elseif ($this->event['state']['user']['job_state'] === self::UC4) {
-            if ($this->event['request']['command'] === self::COMMAND_YES) {
+            if (
+                isset($this->event['request']['nlu']['intents']['job.done.yes']) ||
+                isset($this->event['request']['nlu']['intents']['YANDEX.CONFIRM'])
+            ) {
                 // next job index
                 $index = (int) $this->event['state']['user']['job_index'];
                 if ($index + 1 >= count($this->jobs)) {
