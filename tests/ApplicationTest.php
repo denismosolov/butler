@@ -410,8 +410,19 @@ final class ApplicationTest extends TestCase
         $index = 1;
         $event = $this->getEvent([
             'request' => [
-                'command' => Application::COMMAND_NO,
-                'original_utterance' => Application::COMMAND_NO,
+                'command' => 'нет',
+                'original_utterance' => 'нет',
+                'nlu' => [
+                    'tokens' => [
+                        'нет',
+                    ],
+                    'entities' => [],
+                    'intents' => [
+                      'job.accept.no' => [
+                        'slots' => [],
+                      ],
+                    ]
+                ],
             ],
             'session' => [
                 'new' => false,
