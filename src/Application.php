@@ -21,7 +21,6 @@ class Application
     public const MESSAGE_EMPTY_LIST = 'список работ пуст. заполните список работ.';
 
     public const COMMAND_DECLINE = 'дальше';
-    public const COMMAND_ACCEPT = 'принято';
     public const COMMAND_YES = 'да';
     public const COMMAND_NO = 'нет';
 
@@ -95,7 +94,10 @@ class Application
                 'job_state' => self::UC2,
             ];
         } elseif ($this->event['state']['user']['job_state'] === self::UC2) {
-            if ($this->event['request']['command'] === self::COMMAND_ACCEPT) {
+            if (
+                isset($this->event['request']['nlu']['intents']['job.accept.yes']) ||
+                isset($this->event['request']['nlu']['intents']['YANDEX.CONFIRM'])
+            ) {
                 // accept
                 $index = (int) $this->event['state']['user']['job_index'];
                 $response['response'] = [
