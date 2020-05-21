@@ -418,7 +418,7 @@ final class ApplicationTest extends TestCase
                     ],
                     'entities' => [],
                     'intents' => [
-                      'job.accept.no' => [
+                      'job.done.no' => [
                         'slots' => [],
                       ],
                     ]
