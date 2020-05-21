@@ -166,7 +166,7 @@ class Application
                     'job_index' => $index,
                     'job_state' => self::UC2,
                 ];
-            } elseif (isset($this->event['request']['nlu']['intents']['job.accept.no'])) {
+            } elseif (isset($this->event['request']['nlu']['intents']['job.done.no'])) {
                 // ask to proceed the current job
                 $index = (int) $this->event['state']['user']['job_index'];
                 $response['response'] = [
