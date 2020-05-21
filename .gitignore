@@ -2,6 +2,8 @@ composer.phar
 composer-setup.php
 vendor/
 
+conf/jobs.php
+
 butler.zip
 
 .vscode
