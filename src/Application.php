@@ -20,7 +20,6 @@ class Application
     public const MESSAGE_NOT_AUTHORIZED = 'авторизуйтесь в Яндекс, чтобы продолжить.';
     public const MESSAGE_EMPTY_LIST = 'список работ пуст. заполните список работ.';
 
-    public const COMMAND_DECLINE = 'дальше';
     public const COMMAND_YES = 'да';
     public const COMMAND_NO = 'нет';
 
@@ -108,7 +107,10 @@ class Application
                     'job_index' => $index,
                     'job_state' => self::UC3,
                 ];
-            } elseif ($this->event['request']['command'] === self::COMMAND_DECLINE) {
+            } elseif (
+                isset($this->event['request']['nlu']['intents']['job.accept.no']) ||
+                isset($this->event['request']['nlu']['intents']['YANDEX.REJECT'])
+            ) {
                 // UC-2
                 // next job index
                 $index = (int) $this->event['state']['user']['job_index'];
