@@ -250,8 +250,19 @@ final class ApplicationTest extends TestCase
         $nextIndex = 2;
         $event = $this->getEvent([
             'request' => [
-                'command' => Application::COMMAND_DECLINE,
-                'original_utterance' => Application::COMMAND_DECLINE,
+                'command' => 'дальше',
+                'original_utterance' => 'дальше',
+                'nlu' => [
+                    'tokens' => [
+                        'дальше',
+                    ],
+                    'entities' => [],
+                    'intents' => [
+                      'job.accept.no' => [
+                        'slots' => [],
+                      ],
+                    ]
+                ],
             ],
             'session' => [
                 'new' => false,
