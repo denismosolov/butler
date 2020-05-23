@@ -85,7 +85,7 @@ class Application
         ) {
             // UC-1
             $response['response'] = [
-                'text' => $this->jobs[0]['brief'] . ' ' . self::HINT_AGREE_NEXT,
+                'text' => $this->jobs[0]['brief'],
                 'end_session' => false,
             ];
             $response['user_state_update'] = [
@@ -120,7 +120,7 @@ class Application
                     $index = $index + 1;
                 }
                 $response['response'] = [
-                    'text' => $this->jobs[$index]['brief'] . ' ' . self::HINT_AGREE_NEXT,
+                    'text' => $this->jobs[$index]['brief'],
                     'end_session' => false,
                 ];
                 $response['user_state_update'] = [
@@ -143,7 +143,7 @@ class Application
             // reply with the question
             $index = (int) $this->event['state']['user']['job_index'];
             $response['response'] = [
-                'text' => $this->jobs[$index]['question'] . ' ' . self::HINT_YES_NO,
+                'text' => $this->jobs[$index]['question'],
                 'end_session' => false,
             ];
             $response['user_state_update'] = [
@@ -163,7 +163,7 @@ class Application
                     $index = $index + 1;
                 }
                 $response['response'] = [
-                    'text' => $this->jobs[$index]['brief'] . ' ' . self::HINT_AGREE_NEXT,
+                    'text' => $this->jobs[$index]['brief'],
                     'end_session' => false,
                 ];
                 $response['user_state_update'] = [
@@ -213,7 +213,7 @@ class Application
                     $index = $index + 1;
                 }
                 $response['response'] = [
-                    'text' => $this->jobs[$index]['brief'] . ' ' . self::HINT_AGREE_NEXT,
+                    'text' => $this->jobs[$index]['brief'],
                     'end_session' => false,
                 ];
                 $response['user_state_update'] = [
