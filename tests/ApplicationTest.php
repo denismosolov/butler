@@ -142,7 +142,7 @@ final class ApplicationTest extends TestCase
         $response = $result['response'];
         $this->assertArrayHasKey('text', $response);
         $this->assertNotEmpty($response['text']);
-        $this->assertEquals($this->jobs[0]['brief'] . ' ' . Application::HINT_AGREE_NEXT, $response['text']);
+        $this->assertEquals($this->jobs[0]['brief'], $response['text']);
         $this->assertArrayHasKey('end_session', $response);
         $this->assertFalse($response['end_session']);
 
@@ -180,7 +180,7 @@ final class ApplicationTest extends TestCase
         $response = $result['response'];
         $this->assertArrayHasKey('text', $response);
         $this->assertNotEmpty($response['text']);
-        $this->assertEquals($this->jobs[0]['brief'] . ' ' . Application::HINT_AGREE_NEXT, $response['text']);
+        $this->assertEquals($this->jobs[0]['brief'], $response['text']);
         $this->assertArrayHasKey('end_session', $response);
         $this->assertFalse($response['end_session']);
 
@@ -283,7 +283,7 @@ final class ApplicationTest extends TestCase
         $response = $result['response'];
         $this->assertArrayHasKey('text', $response);
         $this->assertNotEmpty($response['text']);
-        $this->assertEquals($this->jobs[$nextIndex]['brief'] . ' ' . Application::HINT_AGREE_NEXT, $response['text']);
+        $this->assertEquals($this->jobs[$nextIndex]['brief'], $response['text']);
         $this->assertArrayHasKey('end_session', $response);
         $this->assertFalse($response['end_session']);
 
@@ -295,6 +295,7 @@ final class ApplicationTest extends TestCase
         $this->assertEquals(Application::UC2, $user_state_update['job_state']);
     }
 
+    // UC-2 5a
     public function testInvalidNextJob(): void
     {
         $index = 1;
@@ -362,7 +363,7 @@ final class ApplicationTest extends TestCase
         $response = $result['response'];
         $this->assertArrayHasKey('text', $response);
         $this->assertNotEmpty($response['text']);
-        $this->assertEquals($this->jobs[$index]['question'] . ' ' . Application::HINT_YES_NO, $response['text']);
+        $this->assertEquals($this->jobs[$index]['question'], $response['text']);
         $this->assertArrayHasKey('end_session', $response);
         $this->assertFalse($response['end_session']);
 
@@ -414,7 +415,7 @@ final class ApplicationTest extends TestCase
         $response = $result['response'];
         $this->assertArrayHasKey('text', $response);
         $this->assertNotEmpty($response['text']);
-        $this->assertEquals($this->jobs[$nextIndex]['brief'] . ' ' . Application::HINT_AGREE_NEXT, $response['text']);
+        $this->assertEquals($this->jobs[$nextIndex]['brief'], $response['text']);
         $this->assertArrayHasKey('end_session', $response);
         $this->assertFalse($response['end_session']);
 
@@ -586,7 +587,7 @@ final class ApplicationTest extends TestCase
         $response = $result['response'];
         $this->assertArrayHasKey('text', $response);
         $this->assertNotEmpty($response['text']);
-        $this->assertEquals($this->jobs[$nextIndex]['brief'] . ' ' . Application::HINT_AGREE_NEXT, $response['text']);
+        $this->assertEquals($this->jobs[$nextIndex]['brief'], $response['text']);
         $this->assertArrayHasKey('end_session', $response);
         $this->assertFalse($response['end_session']);
 
