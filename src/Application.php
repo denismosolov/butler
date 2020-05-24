@@ -84,13 +84,19 @@ class Application
                    ! isset($this->event['state']['user']['job_state'])
         ) {
             // UC-1
+            $text = $this->jobs[0]['brief'];
             $response['response'] = [
-                'text' => $this->jobs[0]['brief'],
+                'text' => $text,
                 'end_session' => false,
             ];
             $response['user_state_update'] = [
                 'job_index' => 0,
                 'job_state' => self::UC2,
+            ];
+            $response['session_state'] = [
+                'last_response' => [
+                    'text' => $text,
+                ],
             ];
         } elseif ($this->event['state']['user']['job_state'] === self::UC2) {
             if (
@@ -119,36 +125,54 @@ class Application
                 } else {
                     $index = $index + 1;
                 }
+                $text = $this->jobs[$index]['brief'];
                 $response['response'] = [
-                    'text' => $this->jobs[$index]['brief'],
+                    'text' => $text,
                     'end_session' => false,
                 ];
                 $response['user_state_update'] = [
                     'job_index' => $index,
                     'job_state' => self::UC2,
+                ];
+                $response['session_state'] = [
+                    'last_response' => [
+                        'text' => $text,
+                    ],
                 ];
             } else {
                 // reply with a hint
                 $index = (int) $this->event['state']['user']['job_index'];
+                $text = $this->jobs[$index]['brief'] . ' ' . self::HINT_AGREE_NEXT;
                 $response['response'] = [
-                    'text' => $this->jobs[$index]['brief'] . ' ' . self::HINT_AGREE_NEXT,
+                    'text' => $text,
                     'end_session' => false,
                 ];
                 $response['user_state_update'] = [
                     'job_index' => $index,
                     'job_state' => self::UC2,
+                ];
+                $response['session_state'] = [
+                    'last_response' => [
+                        'text' => $text,
+                    ],
                 ];
             }
         } elseif ($this->event['state']['user']['job_state'] === self::UC3) {
             // reply with the question
             $index = (int) $this->event['state']['user']['job_index'];
+            $text = $this->jobs[$index]['question'];
             $response['response'] = [
-                'text' => $this->jobs[$index]['question'],
+                'text' => $text,
                 'end_session' => false,
             ];
             $response['user_state_update'] = [
                 'job_index' => $index,
                 'job_state' => self::UC4,
+            ];
+            $response['session_state'] = [
+                'last_response' => [
+                    'text' => $text,
+                ],
             ];
         } elseif ($this->event['state']['user']['job_state'] === self::UC4) {
             if (
@@ -162,13 +186,19 @@ class Application
                 } else {
                     $index = $index + 1;
                 }
+                $text = $this->jobs[$index]['brief'];
                 $response['response'] = [
-                    'text' => $this->jobs[$index]['brief'],
+                    'text' => $text,
                     'end_session' => false,
                 ];
                 $response['user_state_update'] = [
                     'job_index' => $index,
                     'job_state' => self::UC2,
+                ];
+                $response['session_state'] = [
+                    'last_response' => [
+                        'text' => $text,
+                    ],
                 ];
             } elseif (isset($this->event['request']['nlu']['intents']['job.done.no'])) {
                 // ask to proceed the current job
@@ -184,13 +214,19 @@ class Application
             } else {
                 // reply with a hint
                 $index = (int) $this->event['state']['user']['job_index'];
+                $text = $this->jobs[$index]['question'] . ' ' . self::HINT_YES_NO;
                 $response['response'] = [
-                    'text' => $this->jobs[$index]['question'] . ' ' . self::HINT_YES_NO,
+                    'text' => $text,
                     'end_session' => false,
                 ];
                 $response['user_state_update'] = [
                     'job_index' => $index,
                     'job_state' => self::UC4,
+                ];
+                $response['session_state'] = [
+                    'last_response' => [
+                        'text' => $text,
+                    ],
                 ];
             }
         } elseif ($this->event['state']['user']['job_state'] === self::UC5) {
@@ -212,24 +248,36 @@ class Application
                 } else {
                     $index = $index + 1;
                 }
+                $text = $this->jobs[$index]['brief'];
                 $response['response'] = [
-                    'text' => $this->jobs[$index]['brief'],
+                    'text' => $text,
                     'end_session' => false,
                 ];
                 $response['user_state_update'] = [
                     'job_index' => $index,
                     'job_state' => self::UC2,
                 ];
+                $response['session_state'] = [
+                    'last_response' => [
+                        'text' => $text,
+                    ],
+                ];
             } else {
                 // UC-2 anyway
                 $index = (int) $this->event['state']['user']['job_index'];
+                $text = $this->jobs[$index]['question'] . ' ' . self::HINT_YES_NO;
                 $response['response'] = [
-                    'text' => $this->jobs[$index]['question'] . ' ' . self::HINT_YES_NO,
+                    'text' => $text,
                     'end_session' => false,
                 ];
                 $response['user_state_update'] = [
                     'job_index' => $index,
                     'job_state' => self::UC4,
+                ];
+                $response['session_state'] = [
+                    'last_response' => [
+                        'text' => $text,
+                    ],
                 ];
             }
         }
