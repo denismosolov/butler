@@ -76,6 +76,18 @@ final class ApplicationTest extends TestCase
         return array_replace_recursive($this->event, $mix);
     }
 
+    /**
+     * Check if response' text is written to the session state
+     */
+    private function checkSessionLastReponse(array $result, string $text): void
+    {
+        $this->assertArrayHasKey('session_state', $result);
+        $session_state = $result['session_state'];
+        $this->assertArrayHasKey('last_response', $session_state);
+        $last_response = $session_state['last_response'];
+        $this->assertEquals($text, $last_response['text']);
+    }
+
     public function testNotAuthorized(): void
     {
         $event = $this->getEvent();
@@ -157,6 +169,7 @@ final class ApplicationTest extends TestCase
     // UC-1
     public function testFirstCall(): void
     {
+        $index = 0;
         $event = $this->getEvent([
             'request' => [
                 'command' => '',
@@ -180,14 +193,17 @@ final class ApplicationTest extends TestCase
         $response = $result['response'];
         $this->assertArrayHasKey('text', $response);
         $this->assertNotEmpty($response['text']);
-        $this->assertEquals($this->jobs[0]['brief'], $response['text']);
+        $text = $this->jobs[$index]['brief'];
+        $this->assertEquals($text, $response['text']);
         $this->assertArrayHasKey('end_session', $response);
         $this->assertFalse($response['end_session']);
+
+        $this->checkSessionLastReponse($result, $text);
 
         $this->assertArrayHasKey('user_state_update', $result);
         $user_state_update = $result['user_state_update'];
         $this->assertArrayHasKey('job_index', $user_state_update);
-        $this->assertEquals(0, $user_state_update['job_index']);
+        $this->assertEquals($index, $user_state_update['job_index']);
         $this->assertArrayHasKey('job_state', $user_state_update);
         $this->assertEquals(Application::UC2, $user_state_update['job_state']);
     }
@@ -231,9 +247,12 @@ final class ApplicationTest extends TestCase
         $response = $result['response'];
         $this->assertArrayHasKey('text', $response);
         $this->assertNotEmpty($response['text']);
-        $this->assertEquals(Application::MESSAGE_HOW_TO_END, $response['text']);
+        $text = Application::MESSAGE_HOW_TO_END;
+        $this->assertEquals($text, $response['text']);
         $this->assertArrayHasKey('end_session', $response);
         $this->assertTrue($response['end_session']);
+
+        $this->assertArrayNotHasKey('session_state', $result);
 
         $this->assertArrayHasKey('user_state_update', $result);
         $user_state_update = $result['user_state_update'];
@@ -283,9 +302,12 @@ final class ApplicationTest extends TestCase
         $response = $result['response'];
         $this->assertArrayHasKey('text', $response);
         $this->assertNotEmpty($response['text']);
-        $this->assertEquals($this->jobs[$nextIndex]['brief'], $response['text']);
+        $text = $this->jobs[$nextIndex]['brief'];
+        $this->assertEquals($text, $response['text']);
         $this->assertArrayHasKey('end_session', $response);
         $this->assertFalse($response['end_session']);
+
+        $this->checkSessionLastReponse($result, $text);
 
         $this->assertArrayHasKey('user_state_update', $result);
         $user_state_update = $result['user_state_update'];
@@ -323,9 +345,12 @@ final class ApplicationTest extends TestCase
         $response = $result['response'];
         $this->assertArrayHasKey('text', $response);
         $this->assertNotEmpty($response['text']);
-        $this->assertEquals($this->jobs[$index]['brief'] . ' ' . Application::HINT_AGREE_NEXT, $response['text']);
+        $text = $this->jobs[$index]['brief'] . ' ' . Application::HINT_AGREE_NEXT;
+        $this->assertEquals($text, $response['text']);
         $this->assertArrayHasKey('end_session', $response);
         $this->assertFalse($response['end_session']);
+
+        $this->checkSessionLastReponse($result, $text);
 
         $this->assertArrayHasKey('user_state_update', $result);
         $user_state_update = $result['user_state_update'];
@@ -363,9 +388,12 @@ final class ApplicationTest extends TestCase
         $response = $result['response'];
         $this->assertArrayHasKey('text', $response);
         $this->assertNotEmpty($response['text']);
-        $this->assertEquals($this->jobs[$index]['question'], $response['text']);
+        $text = $this->jobs[$index]['question'];
+        $this->assertEquals($text, $response['text']);
         $this->assertArrayHasKey('end_session', $response);
         $this->assertFalse($response['end_session']);
+
+        $this->checkSessionLastReponse($result, $text);
 
         $this->assertArrayHasKey('user_state_update', $result);
         $user_state_update = $result['user_state_update'];
@@ -415,9 +443,12 @@ final class ApplicationTest extends TestCase
         $response = $result['response'];
         $this->assertArrayHasKey('text', $response);
         $this->assertNotEmpty($response['text']);
-        $this->assertEquals($this->jobs[$nextIndex]['brief'], $response['text']);
+        $text = $this->jobs[$nextIndex]['brief'];
+        $this->assertEquals($text, $response['text']);
         $this->assertArrayHasKey('end_session', $response);
         $this->assertFalse($response['end_session']);
+
+        $this->checkSessionLastReponse($result, $text);
 
         $this->assertArrayHasKey('user_state_update', $result);
         $user_state_update = $result['user_state_update'];
@@ -470,6 +501,8 @@ final class ApplicationTest extends TestCase
         $this->assertArrayHasKey('end_session', $response);
         $this->assertFalse($response['end_session']);
 
+        $this->assertArrayNotHasKey('session_state', $result);
+
         $this->assertArrayHasKey('user_state_update', $result);
         $user_state_update = $result['user_state_update'];
         $this->assertArrayHasKey('job_index', $user_state_update);
@@ -506,9 +539,12 @@ final class ApplicationTest extends TestCase
         $response = $result['response'];
         $this->assertArrayHasKey('text', $response);
         $this->assertNotEmpty($response['text']);
-        $this->assertEquals($this->jobs[$index]['question'] . ' ' . Application::HINT_YES_NO, $response['text']);
+        $text = $this->jobs[$index]['question'] . ' ' . Application::HINT_YES_NO;
+        $this->assertEquals($text, $response['text']);
         $this->assertArrayHasKey('end_session', $response);
         $this->assertFalse($response['end_session']);
+
+        $this->checkSessionLastReponse($result, $text);
 
         $this->assertArrayHasKey('user_state_update', $result);
         $user_state_update = $result['user_state_update'];
@@ -550,6 +586,8 @@ final class ApplicationTest extends TestCase
         $this->assertArrayHasKey('end_session', $response);
         $this->assertTrue($response['end_session']);
 
+        $this->assertArrayNotHasKey('session_state', $result);
+
         $this->assertArrayHasKey('user_state_update', $result);
         $user_state_update = $result['user_state_update'];
         $this->assertArrayHasKey('job_index', $user_state_update);
@@ -587,9 +625,12 @@ final class ApplicationTest extends TestCase
         $response = $result['response'];
         $this->assertArrayHasKey('text', $response);
         $this->assertNotEmpty($response['text']);
+        $text = $this->jobs[$nextIndex]['brief'];
         $this->assertEquals($this->jobs[$nextIndex]['brief'], $response['text']);
         $this->assertArrayHasKey('end_session', $response);
         $this->assertFalse($response['end_session']);
+
+        $this->checkSessionLastReponse($result, $text);
 
         $this->assertArrayHasKey('user_state_update', $result);
         $user_state_update = $result['user_state_update'];
@@ -627,9 +668,71 @@ final class ApplicationTest extends TestCase
         $response = $result['response'];
         $this->assertArrayHasKey('text', $response);
         $this->assertNotEmpty($response['text']);
-        $this->assertEquals($this->jobs[$index]['question'] . ' ' . Application::HINT_YES_NO, $response['text']);
+        $text = $this->jobs[$index]['question'] . ' ' . Application::HINT_YES_NO;
+        $this->assertEquals($text, $response['text']);
         $this->assertArrayHasKey('end_session', $response);
         $this->assertFalse($response['end_session']);
+
+        $this->checkSessionLastReponse($result, $text);
+
+        $this->assertArrayHasKey('user_state_update', $result);
+        $user_state_update = $result['user_state_update'];
+        $this->assertArrayHasKey('job_index', $user_state_update);
+        $this->assertEquals($index, $user_state_update['job_index']);
+        $this->assertArrayHasKey('job_state', $user_state_update);
+        $this->assertEquals(Application::UC4, $user_state_update['job_state']);
+    }
+
+    // repeat
+    public function testCarryOnInvalidThenRepeat(): void
+    {
+        $index = 1;
+        $text = $this->jobs[$index]['question'] . ' ' . Application::HINT_YES_NO;
+        $event = $this->getEvent([
+            'request' => [
+                'command' => 'повтори',
+                'original_utterance' => 'повтори',
+                'nlu' => [
+                    'tokens' => [
+                        'повтори',
+                    ],
+                    'entities' => [],
+                    'intents' => [
+                      'YANDEX.REPEAT' => [
+                        'slots' => [],
+                      ],
+                    ]
+                ],
+            ],
+            'session' => [
+                'new' => false,
+            ],
+            'state' => [
+                'user' => [
+                    'job_index' => $index,
+                    'job_state' => Application::UC4,
+                ],
+                'session' => [
+                    'last_response' => [
+                        'text' => $text,
+                    ],
+                ],
+            ],
+        ]);
+        $app = new Application();
+        $app->setJobs($this->jobs);
+        $app->setEvent($event);
+        $result = $app->run();
+
+        $this->assertArrayHasKey('response', $result);
+        $response = $result['response'];
+        $this->assertArrayHasKey('text', $response);
+        $this->assertNotEmpty($response['text']);
+        $this->assertEquals($text, $response['text']);
+        $this->assertArrayHasKey('end_session', $response);
+        $this->assertFalse($response['end_session']);
+
+        $this->checkSessionLastReponse($result, $text);
 
         $this->assertArrayHasKey('user_state_update', $result);
         $user_state_update = $result['user_state_update'];
