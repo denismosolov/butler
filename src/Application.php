@@ -13,7 +13,11 @@ class Application
     public const UC5 = 'UC-5';
 
     public const HINT_YES_NO = 'скажите да или нет.';
+    public const BUTTON_YES_NO_YES = 'да';
+    public const BUTTON_YES_NO_NO = 'нет';
     public const HINT_AGREE_NEXT = 'скажите принято или дальше.';
+    public const BUTTON_AGREE_NEXT_AGREE = 'принято';
+    public const BUTTON_AGREE_NEXT_NEXT = 'дальше';
 
     public const MESSAGE_HOW_TO_END = 'позовите меня, когда закончите, и я предложу, что делать дальше.';
     public const MESSAGE_CARRY_ON = 'жалаете заняться этим сейчас?';
@@ -88,6 +92,16 @@ class Application
             $response['response'] = [
                 'text' => $text,
                 'end_session' => false,
+                'buttons' => [
+                    [
+                        'title' => self::BUTTON_AGREE_NEXT_AGREE,
+                        'hide' => true,
+                    ],
+                    [
+                        'title' => self::BUTTON_AGREE_NEXT_NEXT,
+                        'hide' => true,
+                    ],
+                ],
             ];
             $response['user_state_update'] = [
                 'job_index' => 0,
@@ -129,6 +143,16 @@ class Application
                 $response['response'] = [
                     'text' => $text,
                     'end_session' => false,
+                    'buttons' => [
+                        [
+                            'title' => self::BUTTON_AGREE_NEXT_AGREE,
+                            'hide' => true,
+                        ],
+                        [
+                            'title' => self::BUTTON_AGREE_NEXT_NEXT,
+                            'hide' => true,
+                        ],
+                    ],
                 ];
                 $response['user_state_update'] = [
                     'job_index' => $index,
@@ -146,6 +170,16 @@ class Application
                 $response['response'] = [
                     'text' => $text,
                     'end_session' => false,
+                    'buttons' => [
+                        [
+                            'title' => self::BUTTON_AGREE_NEXT_AGREE,
+                            'hide' => true,
+                        ],
+                        [
+                            'title' => self::BUTTON_AGREE_NEXT_NEXT,
+                            'hide' => true,
+                        ],
+                    ],
                 ];
                 $response['user_state_update'] = [
                     'job_index' => $index,
@@ -164,6 +198,16 @@ class Application
             $response['response'] = [
                 'text' => $text,
                 'end_session' => false,
+                'buttons' => [
+                    [
+                        'title' => self::BUTTON_YES_NO_YES,
+                        'hide' => true,
+                    ],
+                    [
+                        'title' => self::BUTTON_YES_NO_NO,
+                        'hide' => true,
+                    ],
+                ],
             ];
             $response['user_state_update'] = [
                 'job_index' => $index,
@@ -190,6 +234,16 @@ class Application
                 $response['response'] = [
                     'text' => $text,
                     'end_session' => false,
+                    'buttons' => [
+                        [
+                            'title' => self::BUTTON_AGREE_NEXT_AGREE,
+                            'hide' => true,
+                        ],
+                        [
+                            'title' => self::BUTTON_AGREE_NEXT_NEXT,
+                            'hide' => true,
+                        ],
+                    ],
                 ];
                 $response['user_state_update'] = [
                     'job_index' => $index,
@@ -206,6 +260,16 @@ class Application
                 $response['response'] = [
                     'text' => self::MESSAGE_CARRY_ON,
                     'end_session' => false,
+                    'buttons' => [
+                        [
+                            'title' => self::BUTTON_YES_NO_YES,
+                            'hide' => true,
+                        ],
+                        [
+                            'title' => self::BUTTON_YES_NO_NO,
+                            'hide' => true,
+                        ],
+                    ],
                 ];
                 $response['user_state_update'] = [
                     'job_index' => $index,
@@ -218,6 +282,16 @@ class Application
                 $response['response'] = [
                     'text' => $text,
                     'end_session' => false,
+                                        'buttons' => [
+                        [
+                            'title' => self::BUTTON_YES_NO_YES,
+                            'hide' => true,
+                        ],
+                        [
+                            'title' => self::BUTTON_YES_NO_NO,
+                            'hide' => true,
+                        ],
+                    ],
                 ];
                 $response['user_state_update'] = [
                     'job_index' => $index,
@@ -235,6 +309,16 @@ class Application
                 $response['response'] = [
                     'text' => self::MESSAGE_HOW_TO_END,
                     'end_session' => true,
+                    'buttons' => [
+                        [
+                            'title' => self::BUTTON_YES_NO_YES,
+                            'hide' => true,
+                        ],
+                        [
+                            'title' => self::BUTTON_YES_NO_NO,
+                            'hide' => true,
+                        ],
+                    ],
                 ];
                 $response['user_state_update'] = [
                     'job_index' => $index,
@@ -252,6 +336,16 @@ class Application
                 $response['response'] = [
                     'text' => $text,
                     'end_session' => false,
+                    'buttons' => [
+                        [
+                            'title' => self::BUTTON_AGREE_NEXT_AGREE,
+                            'hide' => true,
+                        ],
+                        [
+                            'title' => self::BUTTON_AGREE_NEXT_NEXT,
+                            'hide' => true,
+                        ],
+                    ],
                 ];
                 $response['user_state_update'] = [
                     'job_index' => $index,
@@ -269,6 +363,16 @@ class Application
                 $response['response'] = [
                     'text' => $text,
                     'end_session' => false,
+                    'buttons' => [
+                        [
+                            'title' => self::BUTTON_YES_NO_YES,
+                            'hide' => true,
+                        ],
+                        [
+                            'title' => self::BUTTON_YES_NO_NO,
+                            'hide' => true,
+                        ],
+                    ],
                 ];
                 $response['user_state_update'] = [
                     'job_index' => $index,
