@@ -88,6 +88,22 @@ final class ApplicationTest extends TestCase
         $this->assertEquals($text, $last_response['text']);
     }
 
+    private function checkSuggest(array $response, string $title1, string $title2): void
+    {
+        $this->assertArrayHasKey('buttons', $response);
+        $buttons = $response['buttons'];
+        $this->assertEquals([
+            [
+                'title' => $title1,
+                'hide' => true,
+            ],
+            [
+                'title' => $title2,
+                'hide' => true,
+            ],
+        ], $buttons);
+    }
+
     public function testNotAuthorized(): void
     {
         $event = $this->getEvent();
@@ -158,6 +174,12 @@ final class ApplicationTest extends TestCase
         $this->assertArrayHasKey('end_session', $response);
         $this->assertFalse($response['end_session']);
 
+        $this->checkSuggest(
+            $response,
+            Application::BUTTON_AGREE_NEXT_AGREE,
+            Application::BUTTON_AGREE_NEXT_NEXT
+        );
+
         $this->assertArrayHasKey('user_state_update', $result);
         $user_state_update = $result['user_state_update'];
         $this->assertArrayHasKey('job_index', $user_state_update);
@@ -197,6 +219,12 @@ final class ApplicationTest extends TestCase
         $this->assertEquals($text, $response['text']);
         $this->assertArrayHasKey('end_session', $response);
         $this->assertFalse($response['end_session']);
+
+        $this->checkSuggest(
+            $response,
+            Application::BUTTON_AGREE_NEXT_AGREE,
+            Application::BUTTON_AGREE_NEXT_NEXT
+        );
 
         $this->checkSessionLastReponse($result, $text);
 
@@ -307,6 +335,12 @@ final class ApplicationTest extends TestCase
         $this->assertArrayHasKey('end_session', $response);
         $this->assertFalse($response['end_session']);
 
+        $this->checkSuggest(
+            $response,
+            Application::BUTTON_AGREE_NEXT_AGREE,
+            Application::BUTTON_AGREE_NEXT_NEXT
+        );
+
         $this->checkSessionLastReponse($result, $text);
 
         $this->assertArrayHasKey('user_state_update', $result);
@@ -350,6 +384,12 @@ final class ApplicationTest extends TestCase
         $this->assertArrayHasKey('end_session', $response);
         $this->assertFalse($response['end_session']);
 
+        $this->checkSuggest(
+            $response,
+            Application::BUTTON_AGREE_NEXT_AGREE,
+            Application::BUTTON_AGREE_NEXT_NEXT
+        );
+
         $this->checkSessionLastReponse($result, $text);
 
         $this->assertArrayHasKey('user_state_update', $result);
@@ -392,6 +432,12 @@ final class ApplicationTest extends TestCase
         $this->assertEquals($text, $response['text']);
         $this->assertArrayHasKey('end_session', $response);
         $this->assertFalse($response['end_session']);
+
+        $this->checkSuggest(
+            $response,
+            Application::BUTTON_YES_NO_YES,
+            Application::BUTTON_YES_NO_NO
+        );
 
         $this->checkSessionLastReponse($result, $text);
 
@@ -448,6 +494,12 @@ final class ApplicationTest extends TestCase
         $this->assertArrayHasKey('end_session', $response);
         $this->assertFalse($response['end_session']);
 
+        $this->checkSuggest(
+            $response,
+            Application::BUTTON_AGREE_NEXT_AGREE,
+            Application::BUTTON_AGREE_NEXT_NEXT
+        );
+
         $this->checkSessionLastReponse($result, $text);
 
         $this->assertArrayHasKey('user_state_update', $result);
@@ -501,6 +553,12 @@ final class ApplicationTest extends TestCase
         $this->assertArrayHasKey('end_session', $response);
         $this->assertFalse($response['end_session']);
 
+        $this->checkSuggest(
+            $response,
+            Application::BUTTON_YES_NO_YES,
+            Application::BUTTON_YES_NO_NO
+        );
+
         $this->assertArrayNotHasKey('session_state', $result);
 
         $this->assertArrayHasKey('user_state_update', $result);
@@ -543,6 +601,12 @@ final class ApplicationTest extends TestCase
         $this->assertEquals($text, $response['text']);
         $this->assertArrayHasKey('end_session', $response);
         $this->assertFalse($response['end_session']);
+
+        $this->checkSuggest(
+            $response,
+            Application::BUTTON_YES_NO_YES,
+            Application::BUTTON_YES_NO_NO
+        );
 
         $this->checkSessionLastReponse($result, $text);
 
@@ -630,6 +694,12 @@ final class ApplicationTest extends TestCase
         $this->assertArrayHasKey('end_session', $response);
         $this->assertFalse($response['end_session']);
 
+        $this->checkSuggest(
+            $response,
+            Application::BUTTON_AGREE_NEXT_AGREE,
+            Application::BUTTON_AGREE_NEXT_NEXT
+        );
+
         $this->checkSessionLastReponse($result, $text);
 
         $this->assertArrayHasKey('user_state_update', $result);
@@ -672,6 +742,12 @@ final class ApplicationTest extends TestCase
         $this->assertEquals($text, $response['text']);
         $this->assertArrayHasKey('end_session', $response);
         $this->assertFalse($response['end_session']);
+
+        $this->checkSuggest(
+            $response,
+            Application::BUTTON_YES_NO_YES,
+            Application::BUTTON_YES_NO_NO
+        );
 
         $this->checkSessionLastReponse($result, $text);
 
@@ -731,6 +807,12 @@ final class ApplicationTest extends TestCase
         $this->assertEquals($text, $response['text']);
         $this->assertArrayHasKey('end_session', $response);
         $this->assertFalse($response['end_session']);
+
+        $this->checkSuggest(
+            $response,
+            Application::BUTTON_YES_NO_YES,
+            Application::BUTTON_YES_NO_NO
+        );
 
         $this->checkSessionLastReponse($result, $text);
 
