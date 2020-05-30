@@ -823,4 +823,16 @@ final class ApplicationTest extends TestCase
         $this->assertArrayHasKey('job_state', $user_state_update);
         $this->assertEquals(Application::UC4, $user_state_update['job_state']);
     }
+
+    public function testJobList(): void
+    {
+        $this->assertFileExists('conf/jobs.php');
+        $jobs = include 'conf/jobs.php';
+        $this->assertIsArray($jobs);
+        $this->assertNotEmpty($jobs);
+        foreach ($jobs as $job) {
+            $this->assertArrayHasKey('brief', $job);
+            $this->assertArrayHasKey('question', $job);
+        }
+    }
 }
