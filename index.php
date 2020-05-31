@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-// include 'vendor/autoload.php';
-// we don't really need autoloading here right now
-include 'src/Application.php';
+require_once 'vendor/autoload.php';
 
 use Butler\Application;
 

@@ -4,6 +4,15 @@ declare(strict_types=1);
 
 namespace Butler;
 
+use Butler\Reply\AskIfCarryOn;
+use Butler\Reply\AskIfJobIsDone;
+use Butler\Reply\Error;
+use Butler\Reply\HintWhatToSayOnceJobIsDone;
+use Butler\Reply\NewUser;
+use Butler\Reply\Unauthorized;
+use Butler\Reply\OfferJob;
+use Butler\Reply\OfferNextJob;
+
 class Application
 {
     public const UC1 = 'UC-1';
@@ -67,324 +76,34 @@ class Application
      */
     public function run(): array
     {
-        $response  = [
-            'response' => [],
-            'version' => '1.0',
+        // цепочка обработки события
+        $replies = [
+            new Error(),
+            new Unauthorized(),
+            new NewUser(),
+            new OfferJob(),
+            new HintWhatToSayOnceJobIsDone(),
+            new OfferNextJob(),
+            new AskIfJobIsDone(),
+            new AskIfCarryOn(),
         ];
-        if (! isset($this->event['session']['user'])) {
-            // not authorized
-            $response['response'] = [
-                'text' => self::MESSAGE_NOT_AUTHORIZED,
-                'end_session' => true,
-            ];
-        } elseif (count($this->jobs) < 2) {
-            // empty job list
-            $response['response'] = [
-                'text' => self::MESSAGE_EMPTY_LIST,
-                'end_session' => true,
-            ];
-        } elseif (
-            ! isset($this->event['state']['user']['job_index']) ||
-                   ! isset($this->event['state']['user']['job_state'])
-        ) {
-            // UC-1
-            $text = $this->jobs[0]['brief'];
-            $response['response'] = [
-                'text' => $text,
-                'end_session' => false,
-                'buttons' => [
-                    [
-                        'title' => self::BUTTON_AGREE_NEXT_AGREE,
-                        'hide' => true,
-                    ],
-                    [
-                        'title' => self::BUTTON_AGREE_NEXT_NEXT,
-                        'hide' => true,
-                    ],
-                ],
-            ];
-            $response['user_state_update'] = [
-                'job_index' => 0,
-                'job_state' => self::UC2,
-            ];
-            $response['session_state'] = [
-                'last_response' => [
-                    'text' => $text,
-                ],
-            ];
-        } elseif ($this->event['state']['user']['job_state'] === self::UC2) {
-            if (
-                isset($this->event['request']['nlu']['intents']['job.accept.yes']) ||
-                isset($this->event['request']['nlu']['intents']['YANDEX.CONFIRM'])
-            ) {
-                // accept
-                $index = (int) $this->event['state']['user']['job_index'];
-                $response['response'] = [
-                    'text' => self::MESSAGE_HOW_TO_END,
-                    'end_session' => true,
-                ];
-                $response['user_state_update'] = [
-                    'job_index' => $index,
-                    'job_state' => self::UC3,
-                ];
-            } elseif (
-                isset($this->event['request']['nlu']['intents']['job.accept.no']) ||
-                isset($this->event['request']['nlu']['intents']['YANDEX.REJECT'])
-            ) {
-                // UC-2
-                // next job index
-                $index = (int) $this->event['state']['user']['job_index'];
-                if ($index + 1 >= count($this->jobs)) {
-                    $index = 0;
-                } else {
-                    $index = $index + 1;
-                }
-                $text = $this->jobs[$index]['brief'];
-                $response['response'] = [
-                    'text' => $text,
-                    'end_session' => false,
-                    'buttons' => [
-                        [
-                            'title' => self::BUTTON_AGREE_NEXT_AGREE,
-                            'hide' => true,
-                        ],
-                        [
-                            'title' => self::BUTTON_AGREE_NEXT_NEXT,
-                            'hide' => true,
-                        ],
-                    ],
-                ];
-                $response['user_state_update'] = [
-                    'job_index' => $index,
-                    'job_state' => self::UC2,
-                ];
-                $response['session_state'] = [
-                    'last_response' => [
-                        'text' => $text,
-                    ],
-                ];
-            } else {
-                // reply with a hint
-                $index = (int) $this->event['state']['user']['job_index'];
-                $text = $this->jobs[$index]['brief'] . ' ' . self::HINT_AGREE_NEXT;
-                $response['response'] = [
-                    'text' => $text,
-                    'end_session' => false,
-                    'buttons' => [
-                        [
-                            'title' => self::BUTTON_AGREE_NEXT_AGREE,
-                            'hide' => true,
-                        ],
-                        [
-                            'title' => self::BUTTON_AGREE_NEXT_NEXT,
-                            'hide' => true,
-                        ],
-                    ],
-                ];
-                $response['user_state_update'] = [
-                    'job_index' => $index,
-                    'job_state' => self::UC2,
-                ];
-                $response['session_state'] = [
-                    'last_response' => [
-                        'text' => $text,
-                    ],
-                ];
-            }
-        } elseif ($this->event['state']['user']['job_state'] === self::UC3) {
-            // reply with the question
-            $index = (int) $this->event['state']['user']['job_index'];
-            $text = $this->jobs[$index]['question'];
-            $response['response'] = [
-                'text' => $text,
-                'end_session' => false,
-                'buttons' => [
-                    [
-                        'title' => self::BUTTON_YES_NO_YES,
-                        'hide' => true,
-                    ],
-                    [
-                        'title' => self::BUTTON_YES_NO_NO,
-                        'hide' => true,
-                    ],
-                ],
-            ];
-            $response['user_state_update'] = [
-                'job_index' => $index,
-                'job_state' => self::UC4,
-            ];
-            $response['session_state'] = [
-                'last_response' => [
-                    'text' => $text,
-                ],
-            ];
-        } elseif ($this->event['state']['user']['job_state'] === self::UC4) {
-            if (
-                isset($this->event['request']['nlu']['intents']['job.done.yes']) ||
-                isset($this->event['request']['nlu']['intents']['YANDEX.CONFIRM'])
-            ) {
-                // next job index
-                $index = (int) $this->event['state']['user']['job_index'];
-                if ($index + 1 >= count($this->jobs)) {
-                    $index = 0;
-                } else {
-                    $index = $index + 1;
-                }
-                $text = $this->jobs[$index]['brief'];
-                $response['response'] = [
-                    'text' => $text,
-                    'end_session' => false,
-                    'buttons' => [
-                        [
-                            'title' => self::BUTTON_AGREE_NEXT_AGREE,
-                            'hide' => true,
-                        ],
-                        [
-                            'title' => self::BUTTON_AGREE_NEXT_NEXT,
-                            'hide' => true,
-                        ],
-                    ],
-                ];
-                $response['user_state_update'] = [
-                    'job_index' => $index,
-                    'job_state' => self::UC2,
-                ];
-                $response['session_state'] = [
-                    'last_response' => [
-                        'text' => $text,
-                    ],
-                ];
-            } elseif (isset($this->event['request']['nlu']['intents']['job.done.no'])) {
-                // ask to proceed the current job
-                $index = (int) $this->event['state']['user']['job_index'];
-                $response['response'] = [
-                    'text' => self::MESSAGE_CARRY_ON,
-                    'end_session' => false,
-                    'buttons' => [
-                        [
-                            'title' => self::BUTTON_YES_NO_YES,
-                            'hide' => true,
-                        ],
-                        [
-                            'title' => self::BUTTON_YES_NO_NO,
-                            'hide' => true,
-                        ],
-                    ],
-                ];
-                $response['user_state_update'] = [
-                    'job_index' => $index,
-                    'job_state' => self::UC5,
-                ];
-            } else {
-                // reply with a hint
-                $index = (int) $this->event['state']['user']['job_index'];
-                $text = $this->jobs[$index]['question'] . ' ' . self::HINT_YES_NO;
-                $response['response'] = [
-                    'text' => $text,
-                    'end_session' => false,
-                                        'buttons' => [
-                        [
-                            'title' => self::BUTTON_YES_NO_YES,
-                            'hide' => true,
-                        ],
-                        [
-                            'title' => self::BUTTON_YES_NO_NO,
-                            'hide' => true,
-                        ],
-                    ],
-                ];
-                $response['user_state_update'] = [
-                    'job_index' => $index,
-                    'job_state' => self::UC4,
-                ];
-                $response['session_state'] = [
-                    'last_response' => [
-                        'text' => $text,
-                    ],
-                ];
-            }
-        } elseif ($this->event['state']['user']['job_state'] === self::UC5) {
-            if ($this->event['request']['command'] === self::COMMAND_YES) {
-                $index = (int) $this->event['state']['user']['job_index'];
-                $response['response'] = [
-                    'text' => self::MESSAGE_HOW_TO_END,
-                    'end_session' => true,
-                    'buttons' => [
-                        [
-                            'title' => self::BUTTON_YES_NO_YES,
-                            'hide' => true,
-                        ],
-                        [
-                            'title' => self::BUTTON_YES_NO_NO,
-                            'hide' => true,
-                        ],
-                    ],
-                ];
-                $response['user_state_update'] = [
-                    'job_index' => $index,
-                    'job_state' => self::UC3,
-                ];
-            } elseif ($this->event['request']['command'] === self::COMMAND_NO) {
-                // next job index
-                $index = (int) $this->event['state']['user']['job_index'];
-                if ($index + 1 >= count($this->jobs)) {
-                    $index = 0;
-                } else {
-                    $index = $index + 1;
-                }
-                $text = $this->jobs[$index]['brief'];
-                $response['response'] = [
-                    'text' => $text,
-                    'end_session' => false,
-                    'buttons' => [
-                        [
-                            'title' => self::BUTTON_AGREE_NEXT_AGREE,
-                            'hide' => true,
-                        ],
-                        [
-                            'title' => self::BUTTON_AGREE_NEXT_NEXT,
-                            'hide' => true,
-                        ],
-                    ],
-                ];
-                $response['user_state_update'] = [
-                    'job_index' => $index,
-                    'job_state' => self::UC2,
-                ];
-                $response['session_state'] = [
-                    'last_response' => [
-                        'text' => $text,
-                    ],
-                ];
-            } else {
-                // UC-2 anyway
-                $index = (int) $this->event['state']['user']['job_index'];
-                $text = $this->jobs[$index]['question'] . ' ' . self::HINT_YES_NO;
-                $response['response'] = [
-                    'text' => $text,
-                    'end_session' => false,
-                    'buttons' => [
-                        [
-                            'title' => self::BUTTON_YES_NO_YES,
-                            'hide' => true,
-                        ],
-                        [
-                            'title' => self::BUTTON_YES_NO_NO,
-                            'hide' => true,
-                        ],
-                    ],
-                ];
-                $response['user_state_update'] = [
-                    'job_index' => $index,
-                    'job_state' => self::UC4,
-                ];
-                $response['session_state'] = [
-                    'last_response' => [
-                        'text' => $text,
-                    ],
-                ];
+
+        // обработка события
+        foreach ($replies as $reply) {
+            $response = $reply->handle($this->event, $this->jobs);
+            if ($response) {
+                return $response;
             }
         }
-        return $response;
+
+        // в цепочке не нашлось обработчика, значит ошибка
+        // @todo уведомление для администратора
+        return [
+            'response' => [
+                'text' => 'произошла какая-то ошибка. завершаю работу.',
+                'end_session' => true,
+            ],
+            'version' => '1.0',
+        ];
     }
 }
