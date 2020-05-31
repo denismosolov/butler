@@ -16,7 +16,7 @@ fi
 
 if [ $? -eq 0 ]; then
   rm -f butler.zip
-  zip butler.zip index.php src/Application.php conf/jobs.php
+  zip -r butler.zip src index.php conf/jobs.php composer.json composer.lock
   # Справка https://cloud.yandex.ru/docs/functions/operations/function/version-manage
   yc serverless function version create \
       --function-name=butler \
