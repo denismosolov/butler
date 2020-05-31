@@ -6,6 +6,7 @@ namespace Butler;
 
 use PHPUnit\Framework\TestCase;
 use Butler\Application;
+use Butler\Reply\ReplyInterface;
 
 final class ApplicationTest extends TestCase
 {
@@ -117,7 +118,7 @@ final class ApplicationTest extends TestCase
         $response = $result['response'];
         $this->assertArrayHasKey('text', $response);
         $this->assertNotEmpty($response['text']);
-        $this->assertEquals(Application::MESSAGE_NOT_AUTHORIZED, $response['text']);
+        $this->assertEquals(ReplyInterface::MESSAGE_NOT_AUTHORIZED, $response['text']);
         $this->assertArrayHasKey('end_session', $response);
         $this->assertTrue($response['end_session']);
     }
@@ -134,7 +135,7 @@ final class ApplicationTest extends TestCase
         $response = $result['response'];
         $this->assertArrayHasKey('text', $response);
         $this->assertNotEmpty($response['text']);
-        $this->assertEquals(Application::MESSAGE_EMPTY_LIST, $response['text']);
+        $this->assertEquals(ReplyInterface::MESSAGE_EMPTY_LIST, $response['text']);
         $this->assertArrayHasKey('end_session', $response);
         $this->assertTrue($response['end_session']);
     }
@@ -176,8 +177,8 @@ final class ApplicationTest extends TestCase
 
         $this->checkSuggest(
             $response,
-            Application::BUTTON_AGREE_NEXT_AGREE,
-            Application::BUTTON_AGREE_NEXT_NEXT
+            ReplyInterface::BUTTON_AGREE_NEXT_AGREE,
+            ReplyInterface::BUTTON_AGREE_NEXT_NEXT
         );
 
         $this->assertArrayHasKey('user_state_update', $result);
@@ -185,7 +186,7 @@ final class ApplicationTest extends TestCase
         $this->assertArrayHasKey('job_index', $user_state_update);
         $this->assertEquals(0, $user_state_update['job_index']);
         $this->assertArrayHasKey('job_state', $user_state_update);
-        $this->assertEquals(Application::UC2, $user_state_update['job_state']);
+        $this->assertEquals(ReplyInterface::UC2, $user_state_update['job_state']);
     }
 
     // UC-1
@@ -222,8 +223,8 @@ final class ApplicationTest extends TestCase
 
         $this->checkSuggest(
             $response,
-            Application::BUTTON_AGREE_NEXT_AGREE,
-            Application::BUTTON_AGREE_NEXT_NEXT
+            ReplyInterface::BUTTON_AGREE_NEXT_AGREE,
+            ReplyInterface::BUTTON_AGREE_NEXT_NEXT
         );
 
         $this->checkSessionLastReponse($result, $text);
@@ -233,7 +234,7 @@ final class ApplicationTest extends TestCase
         $this->assertArrayHasKey('job_index', $user_state_update);
         $this->assertEquals($index, $user_state_update['job_index']);
         $this->assertArrayHasKey('job_state', $user_state_update);
-        $this->assertEquals(Application::UC2, $user_state_update['job_state']);
+        $this->assertEquals(ReplyInterface::UC2, $user_state_update['job_state']);
     }
 
     // UC-2 3a
@@ -262,7 +263,7 @@ final class ApplicationTest extends TestCase
             'state' => [
                 'user' => [
                     'job_index' => $index,
-                    'job_state' => Application::UC2,
+                    'job_state' => ReplyInterface::UC2,
                 ],
             ],
         ]);
@@ -275,7 +276,7 @@ final class ApplicationTest extends TestCase
         $response = $result['response'];
         $this->assertArrayHasKey('text', $response);
         $this->assertNotEmpty($response['text']);
-        $text = Application::MESSAGE_HOW_TO_END;
+        $text = ReplyInterface::MESSAGE_HOW_TO_END;
         $this->assertEquals($text, $response['text']);
         $this->assertArrayHasKey('end_session', $response);
         $this->assertTrue($response['end_session']);
@@ -287,7 +288,7 @@ final class ApplicationTest extends TestCase
         $this->assertArrayHasKey('job_index', $user_state_update);
         $this->assertEquals($index, $user_state_update['job_index']);
         $this->assertArrayHasKey('job_state', $user_state_update);
-        $this->assertEquals(Application::UC3, $user_state_update['job_state']);
+        $this->assertEquals(ReplyInterface::UC3, $user_state_update['job_state']);
     }
 
     // UC-2 4a
@@ -317,7 +318,7 @@ final class ApplicationTest extends TestCase
             'state' => [
                 'user' => [
                     'job_index' => $index,
-                    'job_state' => Application::UC2,
+                    'job_state' => ReplyInterface::UC2,
                 ],
             ],
         ]);
@@ -337,8 +338,8 @@ final class ApplicationTest extends TestCase
 
         $this->checkSuggest(
             $response,
-            Application::BUTTON_AGREE_NEXT_AGREE,
-            Application::BUTTON_AGREE_NEXT_NEXT
+            ReplyInterface::BUTTON_AGREE_NEXT_AGREE,
+            ReplyInterface::BUTTON_AGREE_NEXT_NEXT
         );
 
         $this->checkSessionLastReponse($result, $text);
@@ -348,7 +349,7 @@ final class ApplicationTest extends TestCase
         $this->assertArrayHasKey('job_index', $user_state_update);
         $this->assertEquals($nextIndex, $user_state_update['job_index']);
         $this->assertArrayHasKey('job_state', $user_state_update);
-        $this->assertEquals(Application::UC2, $user_state_update['job_state']);
+        $this->assertEquals(ReplyInterface::UC2, $user_state_update['job_state']);
     }
 
     // UC-2 5a
@@ -366,7 +367,7 @@ final class ApplicationTest extends TestCase
             'state' => [
                 'user' => [
                     'job_index' => $index,
-                    'job_state' => Application::UC2,
+                    'job_state' => ReplyInterface::UC2,
                 ],
             ],
         ]);
@@ -379,15 +380,15 @@ final class ApplicationTest extends TestCase
         $response = $result['response'];
         $this->assertArrayHasKey('text', $response);
         $this->assertNotEmpty($response['text']);
-        $text = $this->jobs[$index]['brief'] . ' ' . Application::HINT_AGREE_NEXT;
+        $text = $this->jobs[$index]['brief'] . ' ' . ReplyInterface::HINT_AGREE_NEXT;
         $this->assertEquals($text, $response['text']);
         $this->assertArrayHasKey('end_session', $response);
         $this->assertFalse($response['end_session']);
 
         $this->checkSuggest(
             $response,
-            Application::BUTTON_AGREE_NEXT_AGREE,
-            Application::BUTTON_AGREE_NEXT_NEXT
+            ReplyInterface::BUTTON_AGREE_NEXT_AGREE,
+            ReplyInterface::BUTTON_AGREE_NEXT_NEXT
         );
 
         $this->checkSessionLastReponse($result, $text);
@@ -397,7 +398,7 @@ final class ApplicationTest extends TestCase
         $this->assertArrayHasKey('job_index', $user_state_update);
         $this->assertEquals($index, $user_state_update['job_index']);
         $this->assertArrayHasKey('job_state', $user_state_update);
-        $this->assertEquals(Application::UC2, $user_state_update['job_state']);
+        $this->assertEquals(ReplyInterface::UC2, $user_state_update['job_state']);
     }
 
     // UC-3
@@ -415,7 +416,7 @@ final class ApplicationTest extends TestCase
             'state' => [
                 'user' => [
                     'job_index' => $index,
-                    'job_state' => Application::UC3,
+                    'job_state' => ReplyInterface::UC3,
                 ],
             ],
         ]);
@@ -435,8 +436,8 @@ final class ApplicationTest extends TestCase
 
         $this->checkSuggest(
             $response,
-            Application::BUTTON_YES_NO_YES,
-            Application::BUTTON_YES_NO_NO
+            ReplyInterface::BUTTON_YES_NO_YES,
+            ReplyInterface::BUTTON_YES_NO_NO
         );
 
         $this->checkSessionLastReponse($result, $text);
@@ -446,7 +447,7 @@ final class ApplicationTest extends TestCase
         $this->assertArrayHasKey('job_index', $user_state_update);
         $this->assertEquals($index, $user_state_update['job_index']);
         $this->assertArrayHasKey('job_state', $user_state_update);
-        $this->assertEquals(Application::UC4, $user_state_update['job_state']);
+        $this->assertEquals(ReplyInterface::UC4, $user_state_update['job_state']);
     }
 
     // UC-4 3a
@@ -476,7 +477,7 @@ final class ApplicationTest extends TestCase
             'state' => [
                 'user' => [
                     'job_index' => $index,
-                    'job_state' => Application::UC4,
+                    'job_state' => ReplyInterface::UC4,
                 ],
             ],
         ]);
@@ -496,8 +497,8 @@ final class ApplicationTest extends TestCase
 
         $this->checkSuggest(
             $response,
-            Application::BUTTON_AGREE_NEXT_AGREE,
-            Application::BUTTON_AGREE_NEXT_NEXT
+            ReplyInterface::BUTTON_AGREE_NEXT_AGREE,
+            ReplyInterface::BUTTON_AGREE_NEXT_NEXT
         );
 
         $this->checkSessionLastReponse($result, $text);
@@ -507,7 +508,7 @@ final class ApplicationTest extends TestCase
         $this->assertArrayHasKey('job_index', $user_state_update);
         $this->assertEquals($nextIndex, $user_state_update['job_index']);
         $this->assertArrayHasKey('job_state', $user_state_update);
-        $this->assertEquals(Application::UC2, $user_state_update['job_state']);
+        $this->assertEquals(ReplyInterface::UC2, $user_state_update['job_state']);
     }
 
     // UC-4 4a
@@ -536,7 +537,7 @@ final class ApplicationTest extends TestCase
             'state' => [
                 'user' => [
                     'job_index' => $index,
-                    'job_state' => Application::UC4,
+                    'job_state' => ReplyInterface::UC4,
                 ],
             ],
         ]);
@@ -549,14 +550,14 @@ final class ApplicationTest extends TestCase
         $response = $result['response'];
         $this->assertArrayHasKey('text', $response);
         $this->assertNotEmpty($response['text']);
-        $this->assertEquals(Application::MESSAGE_CARRY_ON, $response['text']);
+        $this->assertEquals(ReplyInterface::MESSAGE_CARRY_ON, $response['text']);
         $this->assertArrayHasKey('end_session', $response);
         $this->assertFalse($response['end_session']);
 
         $this->checkSuggest(
             $response,
-            Application::BUTTON_YES_NO_YES,
-            Application::BUTTON_YES_NO_NO
+            ReplyInterface::BUTTON_YES_NO_YES,
+            ReplyInterface::BUTTON_YES_NO_NO
         );
 
         $this->assertArrayNotHasKey('session_state', $result);
@@ -566,7 +567,7 @@ final class ApplicationTest extends TestCase
         $this->assertArrayHasKey('job_index', $user_state_update);
         $this->assertEquals($index, $user_state_update['job_index']);
         $this->assertArrayHasKey('job_state', $user_state_update);
-        $this->assertEquals(Application::UC5, $user_state_update['job_state']);
+        $this->assertEquals(ReplyInterface::UC5, $user_state_update['job_state']);
     }
 
     // UC-4 5a
@@ -584,7 +585,7 @@ final class ApplicationTest extends TestCase
             'state' => [
                 'user' => [
                     'job_index' => $index,
-                    'job_state' => Application::UC4,
+                    'job_state' => ReplyInterface::UC4,
                 ],
             ],
         ]);
@@ -597,15 +598,15 @@ final class ApplicationTest extends TestCase
         $response = $result['response'];
         $this->assertArrayHasKey('text', $response);
         $this->assertNotEmpty($response['text']);
-        $text = $this->jobs[$index]['question'] . ' ' . Application::HINT_YES_NO;
+        $text = $this->jobs[$index]['question'] . ' ' . ReplyInterface::HINT_YES_NO;
         $this->assertEquals($text, $response['text']);
         $this->assertArrayHasKey('end_session', $response);
         $this->assertFalse($response['end_session']);
 
         $this->checkSuggest(
             $response,
-            Application::BUTTON_YES_NO_YES,
-            Application::BUTTON_YES_NO_NO
+            ReplyInterface::BUTTON_YES_NO_YES,
+            ReplyInterface::BUTTON_YES_NO_NO
         );
 
         $this->checkSessionLastReponse($result, $text);
@@ -615,7 +616,7 @@ final class ApplicationTest extends TestCase
         $this->assertArrayHasKey('job_index', $user_state_update);
         $this->assertEquals($index, $user_state_update['job_index']);
         $this->assertArrayHasKey('job_state', $user_state_update);
-        $this->assertEquals(Application::UC4, $user_state_update['job_state']);
+        $this->assertEquals(ReplyInterface::UC4, $user_state_update['job_state']);
     }
 
     // UC-5 3a
@@ -624,8 +625,8 @@ final class ApplicationTest extends TestCase
         $index = 1;
         $event = $this->getEvent([
             'request' => [
-                'command' => Application::COMMAND_YES,
-                'original_utterance' => Application::COMMAND_YES,
+                'command' => ReplyInterface::COMMAND_YES,
+                'original_utterance' => ReplyInterface::COMMAND_YES,
             ],
             'session' => [
                 'new' => false,
@@ -633,7 +634,7 @@ final class ApplicationTest extends TestCase
             'state' => [
                 'user' => [
                     'job_index' => $index,
-                    'job_state' => Application::UC5,
+                    'job_state' => ReplyInterface::UC5,
                 ],
             ],
         ]);
@@ -646,7 +647,7 @@ final class ApplicationTest extends TestCase
         $response = $result['response'];
         $this->assertArrayHasKey('text', $response);
         $this->assertNotEmpty($response['text']);
-        $this->assertEquals(Application::MESSAGE_HOW_TO_END, $response['text']);
+        $this->assertEquals(ReplyInterface::MESSAGE_HOW_TO_END, $response['text']);
         $this->assertArrayHasKey('end_session', $response);
         $this->assertTrue($response['end_session']);
 
@@ -657,7 +658,7 @@ final class ApplicationTest extends TestCase
         $this->assertArrayHasKey('job_index', $user_state_update);
         $this->assertEquals($index, $user_state_update['job_index']);
         $this->assertArrayHasKey('job_state', $user_state_update);
-        $this->assertEquals(Application::UC3, $user_state_update['job_state']);
+        $this->assertEquals(ReplyInterface::UC3, $user_state_update['job_state']);
     }
 
     // UC-5 4a
@@ -667,8 +668,8 @@ final class ApplicationTest extends TestCase
         $nextIndex = 2;
         $event = $this->getEvent([
             'request' => [
-                'command' => Application::COMMAND_NO,
-                'original_utterance' => Application::COMMAND_NO,
+                'command' => ReplyInterface::COMMAND_NO,
+                'original_utterance' => ReplyInterface::COMMAND_NO,
             ],
             'session' => [
                 'new' => false,
@@ -676,7 +677,7 @@ final class ApplicationTest extends TestCase
             'state' => [
                 'user' => [
                     'job_index' => $index,
-                    'job_state' => Application::UC5,
+                    'job_state' => ReplyInterface::UC5,
                 ],
             ],
         ]);
@@ -696,8 +697,8 @@ final class ApplicationTest extends TestCase
 
         $this->checkSuggest(
             $response,
-            Application::BUTTON_AGREE_NEXT_AGREE,
-            Application::BUTTON_AGREE_NEXT_NEXT
+            ReplyInterface::BUTTON_AGREE_NEXT_AGREE,
+            ReplyInterface::BUTTON_AGREE_NEXT_NEXT
         );
 
         $this->checkSessionLastReponse($result, $text);
@@ -707,7 +708,7 @@ final class ApplicationTest extends TestCase
         $this->assertArrayHasKey('job_index', $user_state_update);
         $this->assertEquals($nextIndex, $user_state_update['job_index']);
         $this->assertArrayHasKey('job_state', $user_state_update);
-        $this->assertEquals(Application::UC2, $user_state_update['job_state']);
+        $this->assertEquals(ReplyInterface::UC2, $user_state_update['job_state']);
     }
 
     // UC-5 5a
@@ -725,7 +726,7 @@ final class ApplicationTest extends TestCase
             'state' => [
                 'user' => [
                     'job_index' => $index,
-                    'job_state' => Application::UC5,
+                    'job_state' => ReplyInterface::UC5,
                 ],
             ],
         ]);
@@ -738,15 +739,15 @@ final class ApplicationTest extends TestCase
         $response = $result['response'];
         $this->assertArrayHasKey('text', $response);
         $this->assertNotEmpty($response['text']);
-        $text = $this->jobs[$index]['question'] . ' ' . Application::HINT_YES_NO;
+        $text = $this->jobs[$index]['question'] . ' ' . ReplyInterface::HINT_YES_NO;
         $this->assertEquals($text, $response['text']);
         $this->assertArrayHasKey('end_session', $response);
         $this->assertFalse($response['end_session']);
 
         $this->checkSuggest(
             $response,
-            Application::BUTTON_YES_NO_YES,
-            Application::BUTTON_YES_NO_NO
+            ReplyInterface::BUTTON_YES_NO_YES,
+            ReplyInterface::BUTTON_YES_NO_NO
         );
 
         $this->checkSessionLastReponse($result, $text);
@@ -756,14 +757,14 @@ final class ApplicationTest extends TestCase
         $this->assertArrayHasKey('job_index', $user_state_update);
         $this->assertEquals($index, $user_state_update['job_index']);
         $this->assertArrayHasKey('job_state', $user_state_update);
-        $this->assertEquals(Application::UC4, $user_state_update['job_state']);
+        $this->assertEquals(ReplyInterface::UC4, $user_state_update['job_state']);
     }
 
     // repeat
     public function testCarryOnInvalidThenRepeat(): void
     {
         $index = 1;
-        $text = $this->jobs[$index]['question'] . ' ' . Application::HINT_YES_NO;
+        $text = $this->jobs[$index]['question'] . ' ' . ReplyInterface::HINT_YES_NO;
         $event = $this->getEvent([
             'request' => [
                 'command' => 'повтори',
@@ -786,7 +787,7 @@ final class ApplicationTest extends TestCase
             'state' => [
                 'user' => [
                     'job_index' => $index,
-                    'job_state' => Application::UC4,
+                    'job_state' => ReplyInterface::UC4,
                 ],
                 'session' => [
                     'last_response' => [
@@ -810,8 +811,8 @@ final class ApplicationTest extends TestCase
 
         $this->checkSuggest(
             $response,
-            Application::BUTTON_YES_NO_YES,
-            Application::BUTTON_YES_NO_NO
+            ReplyInterface::BUTTON_YES_NO_YES,
+            ReplyInterface::BUTTON_YES_NO_NO
         );
 
         $this->checkSessionLastReponse($result, $text);
@@ -821,7 +822,7 @@ final class ApplicationTest extends TestCase
         $this->assertArrayHasKey('job_index', $user_state_update);
         $this->assertEquals($index, $user_state_update['job_index']);
         $this->assertArrayHasKey('job_state', $user_state_update);
-        $this->assertEquals(Application::UC4, $user_state_update['job_state']);
+        $this->assertEquals(ReplyInterface::UC4, $user_state_update['job_state']);
     }
 
     public function testJobList(): void
