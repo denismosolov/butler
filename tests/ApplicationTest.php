@@ -89,6 +89,12 @@ final class ApplicationTest extends TestCase
         $this->assertEquals($text, $last_response['text']);
     }
 
+    private function checkVersion(array $result): void
+    {
+        $this->assertArrayHasKey('version', $result);
+        $this->assertEquals($result['version'], '1.0');
+    }
+
     private function checkSuggest(array $response, string $title1, string $title2): void
     {
         $this->assertArrayHasKey('buttons', $response);
@@ -121,6 +127,7 @@ final class ApplicationTest extends TestCase
         $this->assertEquals(ReplyInterface::MESSAGE_NOT_AUTHORIZED, $response['text']);
         $this->assertArrayHasKey('end_session', $response);
         $this->assertTrue($response['end_session']);
+        $this->checkVersion($result);
     }
 
     public function testEmptyJobList(): void
@@ -138,6 +145,7 @@ final class ApplicationTest extends TestCase
         $this->assertEquals(ReplyInterface::MESSAGE_EMPTY_LIST, $response['text']);
         $this->assertArrayHasKey('end_session', $response);
         $this->assertTrue($response['end_session']);
+        $this->checkVersion($result);
     }
 
     public function testLegacyDataFormat(): void
@@ -187,6 +195,7 @@ final class ApplicationTest extends TestCase
         $this->assertEquals(0, $user_state_update['job_index']);
         $this->assertArrayHasKey('job_state', $user_state_update);
         $this->assertEquals(ReplyInterface::UC2, $user_state_update['job_state']);
+        $this->checkVersion($result);
     }
 
     // UC-1
@@ -235,6 +244,7 @@ final class ApplicationTest extends TestCase
         $this->assertEquals($index, $user_state_update['job_index']);
         $this->assertArrayHasKey('job_state', $user_state_update);
         $this->assertEquals(ReplyInterface::UC2, $user_state_update['job_state']);
+        $this->checkVersion($result);
     }
 
     // UC-2 3a
@@ -289,6 +299,7 @@ final class ApplicationTest extends TestCase
         $this->assertEquals($index, $user_state_update['job_index']);
         $this->assertArrayHasKey('job_state', $user_state_update);
         $this->assertEquals(ReplyInterface::UC3, $user_state_update['job_state']);
+        $this->checkVersion($result);
     }
 
     // UC-2 4a
@@ -350,6 +361,7 @@ final class ApplicationTest extends TestCase
         $this->assertEquals($nextIndex, $user_state_update['job_index']);
         $this->assertArrayHasKey('job_state', $user_state_update);
         $this->assertEquals(ReplyInterface::UC2, $user_state_update['job_state']);
+        $this->checkVersion($result);
     }
 
     // UC-2 5a
@@ -399,6 +411,7 @@ final class ApplicationTest extends TestCase
         $this->assertEquals($index, $user_state_update['job_index']);
         $this->assertArrayHasKey('job_state', $user_state_update);
         $this->assertEquals(ReplyInterface::UC2, $user_state_update['job_state']);
+        $this->checkVersion($result);
     }
 
     // UC-3
@@ -448,6 +461,7 @@ final class ApplicationTest extends TestCase
         $this->assertEquals($index, $user_state_update['job_index']);
         $this->assertArrayHasKey('job_state', $user_state_update);
         $this->assertEquals(ReplyInterface::UC4, $user_state_update['job_state']);
+        $this->checkVersion($result);
     }
 
     // UC-4 3a
@@ -509,6 +523,7 @@ final class ApplicationTest extends TestCase
         $this->assertEquals($nextIndex, $user_state_update['job_index']);
         $this->assertArrayHasKey('job_state', $user_state_update);
         $this->assertEquals(ReplyInterface::UC2, $user_state_update['job_state']);
+        $this->checkVersion($result);
     }
 
     // UC-4 4a
@@ -568,6 +583,7 @@ final class ApplicationTest extends TestCase
         $this->assertEquals($index, $user_state_update['job_index']);
         $this->assertArrayHasKey('job_state', $user_state_update);
         $this->assertEquals(ReplyInterface::UC5, $user_state_update['job_state']);
+        $this->checkVersion($result);
     }
 
     // UC-4 5a
@@ -617,6 +633,7 @@ final class ApplicationTest extends TestCase
         $this->assertEquals($index, $user_state_update['job_index']);
         $this->assertArrayHasKey('job_state', $user_state_update);
         $this->assertEquals(ReplyInterface::UC4, $user_state_update['job_state']);
+        $this->checkVersion($result);
     }
 
     // UC-5 3a
@@ -659,6 +676,7 @@ final class ApplicationTest extends TestCase
         $this->assertEquals($index, $user_state_update['job_index']);
         $this->assertArrayHasKey('job_state', $user_state_update);
         $this->assertEquals(ReplyInterface::UC3, $user_state_update['job_state']);
+        $this->checkVersion($result);
     }
 
     // UC-5 4a
@@ -709,6 +727,7 @@ final class ApplicationTest extends TestCase
         $this->assertEquals($nextIndex, $user_state_update['job_index']);
         $this->assertArrayHasKey('job_state', $user_state_update);
         $this->assertEquals(ReplyInterface::UC2, $user_state_update['job_state']);
+        $this->checkVersion($result);
     }
 
     // UC-5 5a
@@ -758,6 +777,7 @@ final class ApplicationTest extends TestCase
         $this->assertEquals($index, $user_state_update['job_index']);
         $this->assertArrayHasKey('job_state', $user_state_update);
         $this->assertEquals(ReplyInterface::UC4, $user_state_update['job_state']);
+        $this->checkVersion($result);
     }
 
     // repeat
@@ -823,6 +843,7 @@ final class ApplicationTest extends TestCase
         $this->assertEquals($index, $user_state_update['job_index']);
         $this->assertArrayHasKey('job_state', $user_state_update);
         $this->assertEquals(ReplyInterface::UC4, $user_state_update['job_state']);
+        $this->checkVersion($result);
     }
 
     public function testJobList(): void
