@@ -27,6 +27,9 @@ class AskIfJobIsDone implements ReplyInterface
             if ($uc5) {
                 $text .= ' ' . self::HINT_YES_NO;
             }
+            $response = [
+                'version' => '1.0',
+            ];
             $response['response'] = [
                 'text' => $text,
                 'end_session' => false,

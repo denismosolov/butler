@@ -17,6 +17,9 @@ class AskIfCarryOn implements ReplyInterface
         if ($uc4) {
             $index = (int) $event['state']['user']['job_index'];
             $text = self::MESSAGE_CARRY_ON;
+            $response = [
+                'version' => '1.0',
+            ];
             $response['response'] = [
                 'text' => $text,
                 'end_session' => false,
